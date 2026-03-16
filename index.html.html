@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>入社テスト / Teste de Admissão - JOYWORK</title>
+<style>
+:root {
+  --primary: #1a5276;
+  --accent: #2e86c1;
+  --success: #27ae60;
+  --danger: #e74c3c;
+  --warning: #f39c12;
+  --bg: #f0f4f8;
+  --card: #ffffff;
+  --text: #2c3e50;
+  --border: #dce1e6;
+  --timer-ok: #27ae60;
+  --timer-warn: #f39c12;
+  --timer-danger: #e74c3c;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.header {
+  text-align: center;
+  padding: 24px 16px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.header h1 { font-size: 1.6em; margin-bottom: 4px; }
+.header p { opacity: 0.9; font-size: 0.95em; }
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.card h2 {
+  color: var(--primary);
+  margin-bottom: 16px;
+  font-size: 1.2em;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 8px;
+}
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 1em;
+  transition: border 0.2s;
+}
+input:focus { border-color: var(--accent); outline: none; }
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  text-align: center;
+  width: 100%;
+}
+.btn:hover { background: var(--primary); }
+.btn:active { transform: scale(0.98); }
+.btn:disabled { background: #95a5a6; cursor: not-allowed; }
+.btn-success { background: var(--success); }
+.btn-danger { background: var(--danger); }
+
+/* Timer */
+.timer-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.timer-display {
+  font-size: 2em;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  min-width: 80px;
+  text-align: center;
+}
+.timer-ok { color: var(--timer-ok); }
+.timer-warn { color: var(--timer-warn); }
+.timer-danger { color: var(--timer-danger); animation: pulse 0.5s infinite alternate; }
+@keyframes pulse { from { opacity: 1; } to { opacity: 0.5; } }
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  margin: 0 16px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--timer-ok);
+  border-radius: 4px;
+  transition: width 1s linear, background 0.5s;
+}
+.timer-label {
+  font-size: 0.85em;
+  color: #666;
+  min-width: 100px;
+}
+
+/* Code comparison */
+.code-question {
+  background: #f8f9fa;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.code-question.answered { border-color: var(--accent); }
+.code-num {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 0.85em;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.code-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 1.1em;
+  letter-spacing: 2px;
+}
+.code-str {
+  background: white;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  word-break: break-all;
+}
+.code-label {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.7em;
+  color: #999;
+  letter-spacing: 0;
+  margin-right: 8px;
+}
+.answer-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.answer-btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  font-size: 1.3em;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.answer-btn:hover { border-color: var(--accent); background: #eaf2f8; }
+.answer-btn.selected-same { border-color: var(--success); background: #eafaf1; color: var(--success); font-weight: bold; }
+.answer-btn.selected-diff { border-color: var(--danger); background: #fdedec; color: var(--danger); font-weight: bold; }
+
+/* Calculation */
+.calc-question {
+  background: #f8f9fa;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.calc-question.answered { border-color: var(--accent); }
+.calc-expression {
+  font-family: 'Courier New', monospace;
+  font-size: 1.2em;
+  text-align: center;
+  margin: 8px 0;
+  line-height: 1.8;
+}
+.calc-operands {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 30%;
+}
+.calc-operand { padding: 2px 0; }
+.calc-operator {
+  align-self: flex-start;
+  padding-left: 25%;
+  font-weight: bold;
+}
+.calc-line {
+  width: 50%;
+  margin: 4px auto 4px 25%;
+  border-top: 2px solid var(--text);
+}
+.calc-input {
+  width: 150px !important;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 1.2em;
+  margin: 0 auto;
+  display: block;
+}
+
+/* Results */
+.result-card {
+  text-align: center;
+  padding: 32px;
+}
+.score-display {
+  font-size: 3em;
+  font-weight: bold;
+  margin: 16px 0;
+}
+.score-pass { color: var(--success); }
+.score-fail { color: var(--danger); }
+.result-detail {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.result-box {
+  background: #f8f9fa;
+  padding: 20px 28px;
+  border-radius: 10px;
+  min-width: 200px;
+}
+.result-box h3 { font-size: 0.9em; color: #666; margin-bottom: 8px; }
+.result-box .score { font-size: 1.8em; font-weight: bold; color: var(--primary); }
+
+.section { display: none; }
+.section.active { display: block; }
+.instructions {
+  background: #fef9e7;
+  border-left: 4px solid var(--warning);
+  padding: 16px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 16px;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+.lang-label {
+  display: inline-block;
+  font-size: 0.7em;
+  background: var(--primary);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  vertical-align: top;
+}
+
+/* Responsive */
+/* Product counting - size-based grid */
+.count-grid-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.size-grid {
+  display: grid;
+  gap: 3px;
+  padding: 8px;
+  background: #1a3c6e;
+  border: 4px solid #1a3c6e;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 280px;
+}
+.size-rect {
+  background: #ffd700;
+  border: 2px solid #333;
+  border-radius: 2px;
+  min-height: 36px;
+}
+/* Color cells for Q2 */
+.count-grid {
+  border: 4px solid #1a3c6e;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 8px;
+  background: #e8edf2;
+  flex: 1;
+  min-width: 280px;
+}
+.count-cell {
+  width: 100%;
+  aspect-ratio: 1.4;
+  border-radius: 4px;
+  border: 2px solid #333;
+}
+.cell-white { background: #ffffff; border-style: solid; }
+.cell-dashed { background: #ffffff; border-style: dashed; border-color: #1a3c6e; }
+.cell-peach { background: #f5c6a0; border-color: #d4956a; }
+.cell-gold { background: repeating-linear-gradient(90deg, #c8860a 0px, #c8860a 4px, #e6a817 4px, #e6a817 8px); border-color: #a06a00; }
+.cell-blue { background: #1a3c6e; border-color: #0d1f3c; position: relative; }
+.cell-blue::after {
+  content: '';
+  position: absolute;
+  top: 25%; left: 20%; width: 60%; height: 50%;
+  border: 2px solid #4a8cd4;
+  background: #2a5c9e;
+  border-radius: 2px;
+}
+.legend-sample {
+  width: 40px;
+  height: 28px;
+  border-radius: 4px;
+  border: 2px solid #333;
+  flex-shrink: 0;
+}
+.count-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 200px;
+}
+.count-legend-title {
+  font-weight: bold;
+  font-size: 1.1em;
+  text-align: center;
+  margin-bottom: 4px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.legend-sample-container {
+  width: 64px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.legend-sample-s {
+  width: 28px;
+  height: 28px;
+  background: #ffd700;
+  border: 2px solid #333;
+  border-radius: 2px;
+}
+.legend-sample-m {
+  width: 56px;
+  height: 28px;
+  background: #ffd700;
+  border: 2px solid #333;
+  border-radius: 2px;
+}
+.legend-sample-l {
+  width: 64px;
+  height: 22px;
+  background: #ffd700;
+  border: 2px solid #333;
+  border-radius: 2px;
+}
+.legend-sample-v {
+  width: 22px;
+  height: 36px;
+  background: #ffd700;
+  border: 2px solid #333;
+  border-radius: 2px;
+}
+.legend-input {
+  width: 70px !important;
+  text-align: center;
+  font-size: 1.1em;
+  padding: 8px !important;
+}
+
+/* Route judgment */
+.route-question {
+  background: #f8f9fa;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+.route-question.answered { border-color: var(--accent); }
+.warehouse-map {
+  display: inline-grid;
+  grid-template-columns: 30px repeat(5, 1fr);
+  grid-template-rows: 30px repeat(3, 1fr);
+  gap: 4px;
+  padding: 12px;
+  background: #e8edf2;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  max-width: 380px;
+}
+.wh-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.8em;
+  color: #666;
+}
+.wh-cell {
+  aspect-ratio: 1.3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.75em;
+  border: 2px solid #bbb;
+  background: #f0f0f0;
+  color: #666;
+  min-width: 48px;
+}
+.wh-start {
+  background: #27ae60;
+  color: white;
+  border-color: #1e8449;
+}
+.wh-target {
+  background: #e74c3c;
+  color: white;
+  border-color: #c0392b;
+  font-size: 0.9em;
+}
+.route-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+.route-option {
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 1em;
+  text-align: left;
+}
+.route-option:hover { border-color: var(--accent); background: #eaf2f8; }
+.route-option.selected { border-color: var(--accent); background: #d4e6f1; font-weight: bold; }
+
+@media (max-width: 600px) {
+  .container { padding: 8px; }
+  .header h1 { font-size: 1.2em; }
+  .code-pair { font-size: 0.9em; letter-spacing: 1px; }
+  .timer-display { font-size: 1.5em; }
+  .result-detail { flex-direction: column; align-items: center; }
+  .calc-operands { padding-right: 20%; }
+  .calc-operator { padding-left: 15%; }
+  .calc-line { margin-left: 15%; width: 60%; }
+  .size-grid { min-width: 100%; }
+  .count-grid-container { flex-direction: column; }
+  .count-legend { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .count-legend { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .warehouse-map { max-width: 100%; }
+  .wh-cell { min-width: 36px; font-size: 0.65em; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ===== SECTION: 名前入力 ===== -->
+<div id="sec-start" class="section active">
+  <div class="header">
+    <h1>入社テスト / Teste de Admissão</h1>
+    <p>Miraiseeds</p>
+  </div>
+  <div class="card">
+    <h2>受験者情報 / Dados do Candidato</h2>
+    <div style="margin-bottom: 16px;">
+      <label style="font-weight:bold; display:block; margin-bottom:6px;">
+        名前 / Nome <span style="color:var(--danger)">*</span>
+      </label>
+      <input type="text" id="candidate-name" placeholder="フルネームを入力 / Digite seu nome completo">
+    </div>
+  </div>
+  <div class="card instructions">
+    <p><span class="lang-label">日本語</span><br>
+    このテストは <strong>4種類</strong> あります。各テストには <strong>2分の制限時間</strong> があります。<br>
+    時間が来ると自動的に提出されます。できるだけ多くの問題に正確に回答してください。</p>
+    <br>
+    <p><span class="lang-label">Português</span><br>
+    Este teste tem <strong>4 tipos</strong>. Cada teste tem um <strong>limite de 2 minutos</strong>.<br>
+    Quando o tempo acabar, será enviado automaticamente. Responda o máximo de perguntas com precisão.</p>
+  </div>
+  <button class="btn" onclick="startTest1()">テスト開始 / Iniciar Teste</button>
+</div>
+
+<!-- ===== SECTION: テスト1 コード比較 ===== -->
+<div id="sec-test1" class="section">
+  <div class="timer-bar">
+    <div class="timer-label">
+      テスト1/4<br>
+      <small>コード比較 / Comparação</small>
+    </div>
+    <div class="progress-bar"><div id="progress1" class="progress-fill" style="width:100%"></div></div>
+    <div id="timer1" class="timer-display timer-ok">2:00</div>
+  </div>
+  <div class="card">
+    <h2>テスト① コード比較 / Comparação de Códigos</h2>
+    <p style="margin-bottom:12px;">
+      <span class="lang-label">日本語</span> 2つのコードが同じなら <strong>○</strong>、違っていれば <strong>✕</strong> を選んでください。<br><br>
+      <span class="lang-label">Português</span> Se os códigos forem idênticos, marque <strong>○</strong>. Se forem diferentes, marque <strong>✕</strong>.
+    </p>
+    <div id="code-questions"></div>
+    <button class="btn btn-success" onclick="submitTest1()" style="margin-top:16px;">提出する / Enviar ▶</button>
+  </div>
+</div>
+
+<!-- ===== SECTION: テスト1→2 中間画面 ===== -->
+<div id="sec-between" class="section">
+  <div class="header">
+    <h1>テスト①完了！ / Teste ① Concluído!</h1>
+    <p>次のテストに進みましょう / Vamos para o próximo teste</p>
+  </div>
+  <div class="card instructions">
+    <p><span class="lang-label">日本語</span><br>
+    次は<strong>計算テスト</strong>です。制限時間は <strong>2分</strong> です。<br>
+    四則演算（足し算・引き算・掛け算・割り算）の問題が出ます。</p>
+    <br>
+    <p><span class="lang-label">Português</span><br>
+    O próximo é o <strong>Teste de Cálculo</strong>. O limite de tempo é <strong>2 minutos</strong>.<br>
+    Haverá problemas de adição, subtração, multiplicação e divisão.</p>
+  </div>
+  <button class="btn" onclick="startTest2()">テスト②開始 / Iniciar Teste ② ▶</button>
+</div>
+
+<!-- ===== SECTION: テスト2 計算 ===== -->
+<div id="sec-test2" class="section">
+  <div class="timer-bar">
+    <div class="timer-label">
+      テスト2/4<br>
+      <small>計算 / Cálculos</small>
+    </div>
+    <div class="progress-bar"><div id="progress2" class="progress-fill" style="width:100%"></div></div>
+    <div id="timer2" class="timer-display timer-ok">2:00</div>
+  </div>
+  <div class="card">
+    <h2>テスト② 計算 / Cálculos</h2>
+    <p style="margin-bottom:12px;">
+      <span class="lang-label">日本語</span> 計算をして答えを入力してください。<br><br>
+      <span class="lang-label">Português</span> Faça os cálculos e escreva a resposta.
+    </p>
+    <div id="calc-questions"></div>
+    <button class="btn btn-success" onclick="submitTest2()" style="margin-top:16px;">提出する / Enviar ▶</button>
+  </div>
+</div>
+
+<!-- ===== SECTION: テスト2→3 中間画面 ===== -->
+<div id="sec-between2" class="section">
+  <div class="header">
+    <h1>テスト②完了！ / Teste ② Concluído!</h1>
+    <p>最後のテストに進みましょう / Vamos para o último teste</p>
+  </div>
+  <div class="card instructions">
+    <p><span class="lang-label">日本語</span><br>
+    次は<strong>商品数計算テスト</strong>です。制限時間は <strong>2分</strong> です。<br>
+    画面に表示された図形の数を数えて回答欄に入力してください。</p>
+    <br>
+    <p><span class="lang-label">Português</span><br>
+    O próximo é o <strong>Teste de Contagem de Produtos</strong>. O limite de tempo é <strong>2 minutos</strong>.<br>
+    Conte as figuras mostradas na tela e digite a resposta.</p>
+  </div>
+  <button class="btn" onclick="startTest3()">テスト③開始 / Iniciar Teste ③ ▶</button>
+</div>
+
+<!-- ===== SECTION: テスト3 商品数計算 ===== -->
+<div id="sec-test3" class="section">
+  <div class="timer-bar">
+    <div class="timer-label">
+      テスト3/4<br>
+      <small>商品数計算 / Contagem</small>
+    </div>
+    <div class="progress-bar"><div id="progress3" class="progress-fill" style="width:100%"></div></div>
+    <div id="timer3" class="timer-display timer-ok">2:00</div>
+  </div>
+  <div class="card">
+    <h2>テスト③ 商品数計算 / Contagem de Produtos</h2>
+    <p style="margin-bottom:12px;">
+      <span class="lang-label">日本語</span> 画面の図形の数を数えて、回答欄に入力してください。<br><br>
+      <span class="lang-label">Português</span> Conte as figuras mostradas na tela e escreva a resposta.
+    </p>
+    <div id="count-questions"></div>
+    <button class="btn btn-success" onclick="submitTest3()" style="margin-top:16px;">提出する / Enviar ▶</button>
+  </div>
+</div>
+
+<!-- ===== SECTION: テスト3→4 中間画面 ===== -->
+<div id="sec-between3" class="section">
+  <div class="header">
+    <h1>テスト③完了！ / Teste ③ Concluído!</h1>
+    <p>最後のテストに進みましょう / Vamos para o último teste</p>
+  </div>
+  <div class="card instructions">
+    <p><span class="lang-label">日本語</span><br>
+    次は<strong>順序判断テスト</strong>です。制限時間は <strong>2分</strong> です。<br>
+    倉庫のマップ上で、ピッキングの最も効率的な順番を選んでください。</p>
+    <br>
+    <p><span class="lang-label">Português</span><br>
+    O próximo é o <strong>Teste de Julgamento de Rota</strong>. O limite de tempo é <strong>2 minutos</strong>.<br>
+    Escolha a ordem mais eficiente para coletar produtos no mapa do armazém.</p>
+  </div>
+  <button class="btn" onclick="startTest4()">テスト④開始 / Iniciar Teste ④ ▶</button>
+</div>
+
+<!-- ===== SECTION: テスト4 順序判断 ===== -->
+<div id="sec-test4" class="section">
+  <div class="timer-bar">
+    <div class="timer-label">
+      テスト4/4<br>
+      <small>順序判断 / Rota</small>
+    </div>
+    <div class="progress-bar"><div id="progress4" class="progress-fill" style="width:100%"></div></div>
+    <div id="timer4" class="timer-display timer-ok">2:00</div>
+  </div>
+  <div class="card">
+    <h2>テスト④ 順序判断 / Julgamento de Rota</h2>
+    <p style="margin-bottom:12px;">
+      <span class="lang-label">日本語</span> 倉庫マップ上の<span style="color:#27ae60;font-weight:bold;">★スタート地点</span>から、<span style="color:#e74c3c;font-weight:bold;">赤いマス</span>を全て回る最短ルートを選んでください。<br><br>
+      <span class="lang-label">Português</span> A partir do <span style="color:#27ae60;font-weight:bold;">★Ponto de partida</span> no mapa, escolha a rota mais curta para visitar todos os <span style="color:#e74c3c;font-weight:bold;">quadrados vermelhos</span>.
+    </p>
+    <div id="route-questions"></div>
+    <button class="btn btn-success" onclick="submitTest4()" style="margin-top:16px;">提出する / Enviar ▶</button>
+  </div>
+</div>
+
+<!-- ===== SECTION: 結果 ===== -->
+<div id="sec-result" class="section">
+  <div class="header">
+    <h1>テスト完了！ / Teste Concluído!</h1>
+    <p>お疲れ様でした / Obrigado pelo seu esforço</p>
+  </div>
+  <div class="card result-card">
+    <p style="font-size:1.1em; margin-bottom:16px;">
+      <span class="lang-label">日本語</span> テスト結果が送信されました。ありがとうございました。<br><br>
+      <span class="lang-label">Português</span> Os resultados do teste foram enviados. Obrigado.
+    </p>
+    <div class="result-detail">
+      <div class="result-box">
+        <h3>コード比較 / Comparação</h3>
+        <div id="result-code" class="score">-</div>
+        <div id="result-code-detail" style="font-size:0.85em; color:#666; margin-top:4px;"></div>
+      </div>
+      <div class="result-box">
+        <h3>計算 / Cálculos</h3>
+        <div id="result-calc" class="score">-</div>
+        <div id="result-calc-detail" style="font-size:0.85em; color:#666; margin-top:4px;"></div>
+      </div>
+      <div class="result-box">
+        <h3>商品数計算 / Contagem</h3>
+        <div id="result-count" class="score">-</div>
+        <div id="result-count-detail" style="font-size:0.85em; color:#666; margin-top:4px;"></div>
+      </div>
+      <div class="result-box">
+        <h3>順序判断 / Rota</h3>
+        <div id="result-route" class="score">-</div>
+        <div id="result-route-detail" style="font-size:0.85em; color:#666; margin-top:4px;"></div>
+      </div>
+    </div>
+    <div id="submit-status" style="margin-top:16px; padding:12px; border-radius:8px; font-size:0.9em;"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ============================================================
+// CONFIG: Google Apps Script URL (設定してください)
+// ============================================================
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5aT-Fgn6OF3uqmvQbjEnvYKFJpo_fdF_YwG0cZthJ_B3lPKfNTT-MWay3bULIYTtP/exec';
+
+// ============================================================
+// TEST DATA
+// ============================================================
+
+// コード比較テスト: [code1, code2, answer]
+// answer: "○" = same, "X" = different
+const codeQuestions = [
+  ["K ― Q 0 1 6 ― P T A B",         "K ― Q 0 1 6 ― P T A B",         "○"],
+  ["T ― 1 6 5 0 9 2 ― A A B B",     "T ― 1 6 5 0 9 2 ― A B A B",     "X"],
+  ["T ― 1 6 5 1 1 2 ― A C D G",     "T ― 1 6 5 1 1 2 ― A C D G",     "○"],
+  ["G W ― 1 6 0 5 2 ― A E A A",     "G W ― 1 6 0 5 2 ― A E E A",     "X"],
+  ["G Y ― 1 6 5 2 0 2 ― A D B B",   "G Y ― 1 6 5 2 0 2 ― A D B B",   "○"],
+  ["K ― Q 0 1 6 ― P T T A B B",     "K ― Q 0 1 6 ― P T F A B B",     "X"],
+  ["K ― 0 6 0 2 ― A B A D",         "K ― 0 6 0 2 ― A B A D",         "○"],
+  ["T W ― 1 1 4 0 2 5 ― A F E E",   "T W ― 1 1 4 0 2 5 ― A F F E",   "X"],
+  ["T E ― 1 6 5 1 1 2 ― A E A B",   "T E ― 1 6 5 1 1 2 ― A E A B",   "○"],
+  ["W ― 0 0 1 6 3 5 ― A B B B",     "W ― 0 Q 1 6 3 5 ― A B B B",     "X"],
+  ["K ― E 1 3 0 ― P T B A",         "K + E 1 3 0 ― P T B A",         "X"],
+  ["T J A W B E 0 0 6 9 6",          "T J A W B E 0 0 6 9 6",          "○"],
+  ["H A 8 G 2 4 A L",                "H A 8 G 2 4 A L",                "○"],
+  ["T ― 1 8 3 1 8 2 ― A B C B",     "T ― 1 8 3 ! 8 2 ― A B C B",     "X"],
+  ["R D ― 0 6 2 0 L ― M T E F",     "R D ― 0 6 2 0 L ― M T E F",     "○"],
+  ["H ― 0 6 2 0 9 2 ― A A A M",     "H ― 0 6 2 Q 9 2 ― A A A M",     "X"],
+  ["J ― T 4 5 4 4 ― M L E B",       "J ― T 4 5 4 4 ― M L E B",       "○"],
+  ["T C M N A H K 1 7 2 1 4 E",      "T C N M A H K 1 7 2 1 4 F",      "X"],
+  ["R 1 6 2 2 ― B 0 3 2 9   K 3",   "R 1 6 2 2 ― B 0 3 2 9   K 3",   "○"],
+  ["C 2 4 4 ― B 3 3 Y ― M 0 9 8",   "C 2 4 4 ― B 3 E Y ― M 0 9 8",   "X"]
+];
+
+// 計算テスト: [display, answer, type]
+// type: "add"=足し算, "sub"=引き算, "mul"=掛け算, "div"=割り算
+const calcQuestions = [
+  { nums: [15, 8], op: "+", answer: 23 },
+  { nums: [24, 13], op: "+", answer: 37 },
+  { nums: [56, 27], op: "+", answer: 83 },
+  { nums: [43, 18], op: "−", answer: 25 },
+  { nums: [72, 35], op: "−", answer: 37 },
+  { nums: [100, 46], op: "−", answer: 54 },
+  { nums: [5, 3], op: "×", answer: 15 },
+  { nums: [7, 6], op: "×", answer: 42 },
+  { nums: [8, 9], op: "×", answer: 72 },
+  { nums: [4, 12], op: "×", answer: 48 },
+  { nums: [36, 4], op: "÷", answer: 9 },
+  { nums: [56, 8], op: "÷", answer: 7 },
+  { nums: [45, 5], op: "÷", answer: 9 },
+  { nums: [63, 9], op: "÷", answer: 7 },
+  { nums: [25, 38], op: "+", answer: 63 },
+  { nums: [83, 47], op: "−", answer: 36 },
+  { nums: [3, 9], op: "×", answer: 27 },
+  { nums: [72, 6], op: "÷", answer: 12 },
+  { nums: [38, 29], op: "+", answer: 67 },
+  { nums: [85, 28], op: "−", answer: 57 },
+  { nums: [11, 5], op: "×", answer: 55 }
+];
+
+// 商品数計算テスト
+// Q1: サイズ違いの黄色い図形の総数を数える (rectangle grid, total count)
+// Q2: 色別の図形の数を数える (color cell grid, count per color)
+const countQuestions = [
+  {
+    title: "問題 1 / Questão 1",
+    format: "rects",
+    cols: 8,
+    rows: 7,
+    rects: [
+      {r:0,c:0,w:2,h:1},{r:0,c:2,w:1,h:1},{r:0,c:3,w:3,h:1},{r:0,c:6,w:2,h:1},
+      {r:1,c:0,w:1,h:2},{r:1,c:1,w:2,h:1},{r:1,c:3,w:3,h:1},{r:1,c:6,w:1,h:2},{r:1,c:7,w:1,h:1},
+      {r:2,c:1,w:2,h:1},{r:2,c:3,w:2,h:1},{r:2,c:5,w:1,h:1},{r:2,c:7,w:1,h:1},
+      {r:3,c:0,w:3,h:1},{r:3,c:3,w:1,h:1},{r:3,c:4,w:2,h:1},{r:3,c:6,w:2,h:1},
+      {r:4,c:0,w:2,h:1},{r:4,c:2,w:1,h:2},{r:4,c:3,w:2,h:1},{r:4,c:5,w:1,h:1},{r:4,c:6,w:2,h:1},
+      {r:5,c:0,w:1,h:1},{r:5,c:1,w:1,h:1},{r:5,c:3,w:3,h:1},{r:5,c:6,w:1,h:1},{r:5,c:7,w:1,h:1},
+      {r:6,c:0,w:2,h:1},{r:6,c:2,w:1,h:1},{r:6,c:3,w:1,h:1},{r:6,c:4,w:3,h:1},{r:6,c:7,w:1,h:1}
+    ],
+    answers: { total: 32 }
+  },
+  {
+    title: "問題 2 / Questão 2",
+    format: "cells",
+    layout: [
+      ['g','g','p','g','p','g','p'],
+      ['p','b','g','b','g','b','g'],
+      ['g','p','w','p','w','p','w'],
+      ['b','g','p','g','p','g','b'],
+      ['g','w','g','w','g','w','g'],
+      ['p','g','b','g','b','g','p'],
+      ['g','b','p','b','p','b','w'],
+      ['w','g','g','p','g','g','w']
+    ],
+    answers: { w: 9, d: 0, p: 12, g: 25, b: 10 }
+  }
+];
+
+// 順序判断テスト: ルート最適化
+// Grid: 3 rows (A,B,C) × 5 cols (1-5), Manhattan distance
+// Each question: start point, 3 targets, 4 route options, 1 correct answer
+const routeQuestions = [
+  {
+    start: [0, 0], // A1
+    targets: [{r:0,c:4,label:'A5'},{r:1,c:1,label:'B2'},{r:2,c:4,label:'C5'}],
+    options: ['B2 → A5 → C5','A5 → C5 → B2','A5 → B2 → C5','C5 → B2 → A5'],
+    answer: 0 // 2+4+2=8
+  },
+  {
+    start: [0, 0], // A1
+    targets: [{r:0,c:3,label:'A4'},{r:2,c:0,label:'C1'},{r:2,c:3,label:'C4'}],
+    options: ['A4 → C4 → C1','C1 → C4 → A4','A4 → C1 → C4','C4 → A4 → C1'],
+    answer: 1 // 2+3+2=7
+  },
+  {
+    start: [0, 0], // A1
+    targets: [{r:1,c:0,label:'B1'},{r:1,c:3,label:'B4'},{r:0,c:4,label:'A5'}],
+    options: ['B1 → B4 → A5','A5 → B4 → B1','B4 → B1 → A5','A5 → B1 → B4'],
+    answer: 0 // 1+3+2=6
+  },
+  {
+    start: [0, 0], // A1
+    targets: [{r:2,c:1,label:'C2'},{r:0,c:4,label:'A5'},{r:2,c:4,label:'C5'}],
+    options: ['C2 → C5 → A5','A5 → C5 → C2','C2 → A5 → C5','A5 → C2 → C5'],
+    answer: 0 // 3+3+2=8
+  },
+  {
+    start: [2, 0], // C1
+    targets: [{r:0,c:0,label:'A1'},{r:1,c:2,label:'B3'},{r:0,c:4,label:'A5'}],
+    options: ['B3 → A1 → A5','A5 → B3 → A1','A1 → B3 → A5','B3 → A5 → A1'],
+    answer: 2 // 2+3+3=8
+  },
+  {
+    start: [1, 0], // B1
+    targets: [{r:0,c:2,label:'A3'},{r:0,c:4,label:'A5'},{r:2,c:4,label:'C5'}],
+    options: ['A3 → A5 → C5','C5 → A5 → A3','A3 → C5 → A5','A5 → A3 → C5'],
+    answer: 0 // 3+2+2=7
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let candidateName = '';
+let test1Answers = new Array(20).fill(null);
+let test2Answers = new Array(21).fill(null);
+let test3Answers = {};
+let timer1Interval = null;
+let timer2Interval = null;
+let timer3Interval = null;
+let test1TimeUsed = 0;
+let test2TimeUsed = 0;
+let test3TimeUsed = 0;
+let test4Answers = new Array(6).fill(null);
+let timer4Interval = null;
+let test4TimeUsed = 0;
+const TIMER_SECONDS = 120; // 2 minutes
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ============================================================
+// TEST 1: CODE COMPARISON
+// ============================================================
+function buildCodeQuestions() {
+  const container = document.getElementById('code-questions');
+  const circled = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩','⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳'];
+  codeQuestions.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'code-question';
+    div.id = 'cq-' + i;
+    div.innerHTML = `
+      <span class="code-num">${circled[i]}</span>
+      <div class="code-pair">
+        <div class="code-str"><span class="code-label">A</span>${q[0]}</div>
+        <div class="code-str"><span class="code-label">B</span>${q[1]}</div>
+      </div>
+      <div class="answer-btns">
+        <button class="answer-btn" onclick="selectCode(${i},'○')" id="cb-${i}-same">○ 同じ / Igual</button>
+        <button class="answer-btn" onclick="selectCode(${i},'X')" id="cb-${i}-diff">✕ 違う / Diferente</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function selectCode(idx, val) {
+  test1Answers[idx] = val;
+  document.getElementById('cb-' + idx + '-same').className = 'answer-btn' + (val === '○' ? ' selected-same' : '');
+  document.getElementById('cb-' + idx + '-diff').className = 'answer-btn' + (val === 'X' ? ' selected-diff' : '');
+  document.getElementById('cq-' + idx).classList.add('answered');
+}
+
+function startTest1() {
+  candidateName = document.getElementById('candidate-name').value.trim();
+  if (!candidateName) {
+    alert('名前を入力してください / Por favor, digite seu nome');
+    return;
+  }
+  buildCodeQuestions();
+  showSection('sec-test1');
+  startTimer(1);
+}
+
+function submitTest1() {
+  clearInterval(timer1Interval);
+  showSection('sec-between');
+}
+
+// ============================================================
+// TEST 2: CALCULATION
+// ============================================================
+function buildCalcQuestions() {
+  const container = document.getElementById('calc-questions');
+  const circled = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩','⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳','㉑'];
+  const opLabels = { '+': '+', '−': '−', '×': '×', '÷': '÷' };
+
+  calcQuestions.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'calc-question';
+    div.id = 'calcq-' + i;
+
+    let expressionHTML = '';
+    if (q.op === '×' || q.op === '÷') {
+      // Horizontal display for multiplication/division
+      expressionHTML = `
+        <div class="calc-expression">
+          ${q.nums[0]} ${opLabels[q.op]} ${q.nums[1]} =
+        </div>
+      `;
+    } else {
+      // Vertical display for addition/subtraction
+      const maxLen = Math.max(...q.nums.map(n => n.toString().length));
+      let rows = q.nums.map((n, ni) => {
+        const padded = n.toString().padStart(maxLen, '\u00A0');
+        if (ni === q.nums.length - 1 && q.nums.length > 1) {
+          return `<div class="calc-operand" style="font-family:'Courier New',monospace; font-size:1.2em;">
+            <span style="margin-right:8px;">${opLabels[q.op]}</span>${padded}
+          </div>`;
+        }
+        return `<div class="calc-operand" style="font-family:'Courier New',monospace; font-size:1.2em;">
+          <span style="margin-right:8px; visibility:${ni === 0 ? 'hidden' : 'hidden'};">${opLabels[q.op]}</span>${padded}
+        </div>`;
+      }).join('');
+
+      expressionHTML = `
+        <div class="calc-operands">
+          ${rows}
+        </div>
+        <div class="calc-line"></div>
+      `;
+    }
+
+    div.innerHTML = `
+      <span class="code-num">${circled[i]}</span>
+      ${expressionHTML}
+      <input type="number" class="calc-input" id="calc-ans-${i}"
+        placeholder="?" oninput="calcChanged(${i})"
+        inputmode="numeric">
+    `;
+    container.appendChild(div);
+  });
+}
+
+function calcChanged(idx) {
+  const val = document.getElementById('calc-ans-' + idx).value;
+  test2Answers[idx] = val !== '' ? Number(val) : null;
+  document.getElementById('calcq-' + idx).classList.toggle('answered', val !== '');
+}
+
+function startTest2() {
+  buildCalcQuestions();
+  showSection('sec-test2');
+  startTimer(2);
+}
+
+function submitTest2() {
+  clearInterval(timer2Interval);
+  // Collect any remaining answers
+  calcQuestions.forEach((q, i) => {
+    const val = document.getElementById('calc-ans-' + i).value;
+    test2Answers[i] = val !== '' ? Number(val) : null;
+  });
+  showSection('sec-between2');
+}
+
+// ============================================================
+// TEST 3: PRODUCT COUNTING
+// ============================================================
+function buildCountQuestions() {
+  const container = document.getElementById('count-questions');
+  const colorLabels = {
+    w: '白 / Branco',
+    d: '点線 / Pontilhado',
+    p: 'ピーチ / Pêssego',
+    g: '金 / Dourado',
+    b: '青 / Azul'
+  };
+  const colorClasses = { w:'white', d:'dashed', p:'peach', g:'gold', b:'blue' };
+
+  countQuestions.forEach((q, qi) => {
+    const wrapper = document.createElement('div');
+    wrapper.style.marginBottom = '24px';
+    wrapper.innerHTML = '<h3 style="margin-bottom:12px; color:var(--primary);">' + q.title + '</h3>';
+
+    const gridContainer = document.createElement('div');
+    gridContainer.className = 'count-grid-container';
+
+    if (q.format === 'rects') {
+      // Q1: Yellow rectangles grid with total count
+      const grid = document.createElement('div');
+      grid.className = 'size-grid';
+      grid.style.gridTemplateColumns = 'repeat(' + q.cols + ', 1fr)';
+      grid.style.gridTemplateRows = 'repeat(' + q.rows + ', 36px)';
+
+      q.rects.forEach(function(rect) {
+        const div = document.createElement('div');
+        div.className = 'size-rect';
+        div.style.gridColumn = (rect.c + 1) + ' / ' + (rect.c + 1 + rect.w);
+        div.style.gridRow = (rect.r + 1) + ' / ' + (rect.r + 1 + rect.h);
+        grid.appendChild(div);
+      });
+      gridContainer.appendChild(grid);
+
+      // Single total count input
+      const legend = document.createElement('div');
+      legend.className = 'count-legend';
+      legend.innerHTML = '<div class="count-legend-title">RESPOSTA</div>';
+      const item = document.createElement('div');
+      item.className = 'legend-item';
+      item.style.flexDirection = 'column';
+      item.style.alignItems = 'center';
+      item.style.gap = '8px';
+      item.innerHTML =
+        '<span style="font-size:0.95em; font-weight:bold; text-align:center;">図形の総数<br>Total de figuras</span>' +
+        '<input type="number" class="legend-input" id="count-' + qi + '-total"' +
+        ' placeholder="?" oninput="countChanged(' + qi + ',\'total\')" inputmode="numeric"' +
+        ' style="width:100px !important; font-size:1.3em; padding:12px !important;">';
+      legend.appendChild(item);
+      gridContainer.appendChild(legend);
+
+    } else {
+      // Q2: Color cell grid with per-color counts
+      const grid = document.createElement('div');
+      grid.className = 'count-grid';
+      q.layout.forEach(function(row) {
+        row.forEach(function(cell) {
+          const cellDiv = document.createElement('div');
+          cellDiv.className = 'count-cell cell-' + colorClasses[cell];
+          grid.appendChild(cellDiv);
+        });
+      });
+      gridContainer.appendChild(grid);
+
+      // Legend with color samples and inputs
+      const legend = document.createElement('div');
+      legend.className = 'count-legend';
+      legend.innerHTML = '<div class="count-legend-title">RESPOSTA</div>';
+
+      var typesInGrid = {};
+      q.layout.forEach(function(row) { row.forEach(function(cell) { typesInGrid[cell] = true; }); });
+
+      ['w','d','p','g','b'].forEach(function(type) {
+        if (!typesInGrid[type] && (!q.answers[type] || q.answers[type] === 0)) return;
+        var item = document.createElement('div');
+        item.className = 'legend-item';
+        item.innerHTML =
+          '<div class="legend-sample cell-' + colorClasses[type] + '" style="border: 2px solid #333;"></div>' +
+          '<span style="flex:1; font-size:0.9em;">' + colorLabels[type] + '</span>' +
+          '<input type="number" class="legend-input" id="count-' + qi + '-' + type + '"' +
+          ' placeholder="?" oninput="countChanged(' + qi + ',\'' + type + '\')" inputmode="numeric">';
+        legend.appendChild(item);
+      });
+      gridContainer.appendChild(legend);
+    }
+
+    wrapper.appendChild(gridContainer);
+    container.appendChild(wrapper);
+  });
+}
+
+function countChanged(qi, type) {
+  const val = document.getElementById('count-' + qi + '-' + type).value;
+  if (!test3Answers[qi]) test3Answers[qi] = {};
+  test3Answers[qi][type] = val !== '' ? Number(val) : null;
+}
+
+function startTest3() {
+  buildCountQuestions();
+  showSection('sec-test3');
+  startTimer(3);
+}
+
+function submitTest3() {
+  clearInterval(timer3Interval);
+  // Collect remaining answers
+  countQuestions.forEach((q, qi) => {
+    if (q.format === 'rects') {
+      const el = document.getElementById('count-' + qi + '-total');
+      if (el) {
+        if (!test3Answers[qi]) test3Answers[qi] = {};
+        test3Answers[qi]['total'] = el.value !== '' ? Number(el.value) : null;
+      }
+    } else {
+      ['w','d','p','g','b'].forEach(type => {
+        const el = document.getElementById('count-' + qi + '-' + type);
+        if (el) {
+          if (!test3Answers[qi]) test3Answers[qi] = {};
+          test3Answers[qi][type] = el.value !== '' ? Number(el.value) : null;
+        }
+      });
+    }
+  });
+  showSection('sec-between3');
+}
+
+// ============================================================
+// TEST 4: ROUTE JUDGMENT
+// ============================================================
+function buildRouteQuestions() {
+  const container = document.getElementById('route-questions');
+  const circled = ['①','②','③','④','⑤','⑥'];
+  const rowLabels = ['A','B','C'];
+
+  routeQuestions.forEach((q, qi) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'route-question';
+    wrapper.id = 'rq-' + qi;
+
+    // Build warehouse grid
+    let gridHTML = '<div class="warehouse-map">';
+    // Corner empty
+    gridHTML += '<div class="wh-header"></div>';
+    // Column headers
+    for (let c = 0; c < 5; c++) {
+      gridHTML += '<div class="wh-header">' + (c+1) + '</div>';
+    }
+    // Rows
+    for (let r = 0; r < 3; r++) {
+      gridHTML += '<div class="wh-header">' + rowLabels[r] + '</div>';
+      for (let c = 0; c < 5; c++) {
+        const label = rowLabels[r] + (c+1);
+        let cls = 'wh-cell';
+        let text = label;
+        if (q.start[0] === r && q.start[1] === c) {
+          cls += ' wh-start';
+          text = '★' + label;
+        } else if (q.targets.some(t => t.r === r && t.c === c)) {
+          cls += ' wh-target';
+        }
+        gridHTML += '<div class="' + cls + '">' + text + '</div>';
+      }
+    }
+    gridHTML += '</div>';
+
+    // Build options
+    let optionsHTML = '<div class="route-options">';
+    q.options.forEach((opt, oi) => {
+      optionsHTML += '<div class="route-option" id="ro-' + qi + '-' + oi + '" onclick="selectRoute(' + qi + ',' + oi + ')">';
+      optionsHTML += String.fromCharCode(65 + oi) + ') ★ → ' + opt;
+      optionsHTML += '</div>';
+    });
+    optionsHTML += '</div>';
+
+    wrapper.innerHTML = '<span class="code-num">' + circled[qi] + '</span>' +
+      '<span style="font-weight:bold; vertical-align:middle;"> ピック3箇所を回る最短順は？ / Qual a ordem mais curta para 3 coletas?</span>' +
+      '<div style="margin-top:12px;">' + gridHTML + optionsHTML + '</div>';
+
+    container.appendChild(wrapper);
+  });
+}
+
+function selectRoute(qi, oi) {
+  test4Answers[qi] = oi;
+  // Clear previous selection
+  routeQuestions[qi].options.forEach((_, j) => {
+    document.getElementById('ro-' + qi + '-' + j).className = 'route-option' + (j === oi ? ' selected' : '');
+  });
+  document.getElementById('rq-' + qi).classList.add('answered');
+}
+
+function startTest4() {
+  buildRouteQuestions();
+  showSection('sec-test4');
+  startTimer(4);
+}
+
+function submitTest4() {
+  clearInterval(timer4Interval);
+  showResults();
+}
+
+// ============================================================
+// TIMER
+// ============================================================
+function startTimer(testNum) {
+  let remaining = TIMER_SECONDS;
+  const timerEl = document.getElementById('timer' + testNum);
+  const progressEl = document.getElementById('progress' + testNum);
+  const startTime = Date.now();
+
+  function updateTimer() {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    remaining = Math.max(0, TIMER_SECONDS - elapsed);
+
+    if (testNum === 1) test1TimeUsed = elapsed;
+    else if (testNum === 2) test2TimeUsed = elapsed;
+    else if (testNum === 3) test3TimeUsed = elapsed;
+    else if (testNum === 4) test4TimeUsed = elapsed;
+
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    timerEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+    const pct = (remaining / TIMER_SECONDS) * 100;
+    progressEl.style.width = pct + '%';
+
+    if (remaining > 60) {
+      timerEl.className = 'timer-display timer-ok';
+      progressEl.style.background = 'var(--timer-ok)';
+    } else if (remaining > 30) {
+      timerEl.className = 'timer-display timer-warn';
+      progressEl.style.background = 'var(--timer-warn)';
+    } else {
+      timerEl.className = 'timer-display timer-danger';
+      progressEl.style.background = 'var(--timer-danger)';
+    }
+
+    if (remaining <= 0) {
+      if (testNum === 1) submitTest1();
+      else if (testNum === 2) submitTest2();
+      else if (testNum === 3) submitTest3();
+      else submitTest4();
+    }
+  }
+
+  updateTimer();
+  if (testNum === 1) timer1Interval = setInterval(updateTimer, 1000);
+  else if (testNum === 2) timer2Interval = setInterval(updateTimer, 1000);
+  else if (testNum === 3) timer3Interval = setInterval(updateTimer, 1000);
+  else timer4Interval = setInterval(updateTimer, 1000);
+}
+
+// ============================================================
+// RESULTS
+// ============================================================
+function showResults() {
+  // Score test 1
+  let code_correct = 0;
+  let code_answered = 0;
+  codeQuestions.forEach((q, i) => {
+    if (test1Answers[i] !== null) {
+      code_answered++;
+      if (test1Answers[i] === q[2]) code_correct++;
+    }
+  });
+
+  // Score test 2
+  let calc_correct = 0;
+  let calc_answered = 0;
+  calcQuestions.forEach((q, i) => {
+    if (test2Answers[i] !== null) {
+      calc_answered++;
+      if (test2Answers[i] === q.answer) calc_correct++;
+    }
+  });
+
+  // Score test 3
+  let count_correct = 0;
+  let count_total = 0;
+  countQuestions.forEach((q, qi) => {
+    Object.keys(q.answers).forEach(type => {
+      if (q.answers[type] === undefined) return;
+      count_total++;
+      if (test3Answers[qi] && test3Answers[qi][type] === q.answers[type]) {
+        count_correct++;
+      }
+    });
+  });
+
+  // Score test 4
+  let route_correct = 0;
+  let route_answered = 0;
+  routeQuestions.forEach((q, i) => {
+    if (test4Answers[i] !== null) {
+      route_answered++;
+      if (test4Answers[i] === q.answer) route_correct++;
+    }
+  });
+
+  document.getElementById('result-code').textContent = `${code_correct} / ${codeQuestions.length}`;
+  document.getElementById('result-code-detail').textContent =
+    `回答数: ${code_answered} | 正答率: ${code_answered > 0 ? Math.round(code_correct/code_answered*100) : 0}% | 時間: ${formatTime(test1TimeUsed)}`;
+
+  document.getElementById('result-calc').textContent = `${calc_correct} / ${calcQuestions.length}`;
+  document.getElementById('result-calc-detail').textContent =
+    `回答数: ${calc_answered} | 正答率: ${calc_answered > 0 ? Math.round(calc_correct/calc_answered*100) : 0}% | 時間: ${formatTime(test2TimeUsed)}`;
+
+  document.getElementById('result-count').textContent = `${count_correct} / ${count_total}`;
+  document.getElementById('result-count-detail').textContent =
+    `正答率: ${count_total > 0 ? Math.round(count_correct/count_total*100) : 0}% | 時間: ${formatTime(test3TimeUsed)}`;
+
+  document.getElementById('result-route').textContent = `${route_correct} / ${routeQuestions.length}`;
+  document.getElementById('result-route-detail').textContent =
+    `回答数: ${route_answered} | 正答率: ${route_answered > 0 ? Math.round(route_correct/route_answered*100) : 0}% | 時間: ${formatTime(test4TimeUsed)}`;
+
+  showSection('sec-result');
+  sendResults(code_correct, code_answered, calc_correct, calc_answered, count_correct, count_total, route_correct, route_answered);
+}
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+// ============================================================
+// SEND TO GOOGLE SHEETS
+// ============================================================
+function sendResults(codeCorrect, codeAnswered, calcCorrect, calcAnswered, countCorrect, countTotal, routeCorrect, routeAnswered) {
+  const statusEl = document.getElementById('submit-status');
+
+  if (GAS_URL.includes('★')) {
+    statusEl.innerHTML = '<span style="color:var(--warning);">⚠ テスト結果の送信先が未設定です。管理者に連絡してください。</span>';
+    return;
+  }
+
+  statusEl.innerHTML = '送信中... / Enviando...';
+
+  const count_rate = countTotal > 0 ? Math.round(countCorrect / countTotal * 100) : 0;
+  const count_answers = [];
+  countQuestions.forEach((q, qi) => {
+    Object.keys(q.answers).forEach(type => {
+      if (q.answers[type] === undefined) return;
+      const userAnswer = test3Answers[qi] && test3Answers[qi][type] !== null ? test3Answers[qi][type] : '-';
+      count_answers.push({
+        q: qi + 1,
+        type: type,
+        answer: userAnswer,
+        expected: q.answers[type],
+        correct: userAnswer === q.answers[type]
+      });
+    });
+  });
+
+  const data = {
+    name: candidateName,
+    timestamp: new Date().toISOString(),
+    code_correct: codeCorrect,
+    code_total: codeQuestions.length,
+    code_answered: codeAnswered,
+    code_rate: codeAnswered > 0 ? Math.round(codeCorrect / codeAnswered * 100) : 0,
+    code_time: formatTime(test1TimeUsed),
+    calc_correct: calcCorrect,
+    calc_total: calcQuestions.length,
+    calc_answered: calcAnswered,
+    calc_rate: calcAnswered > 0 ? Math.round(calcCorrect / calcAnswered * 100) : 0,
+    calc_time: formatTime(test2TimeUsed),
+    count_correct: countCorrect,
+    count_total: countTotal,
+    count_rate: count_rate,
+    count_time: formatTime(test3TimeUsed),
+    route_correct: routeCorrect,
+    route_total: routeQuestions.length,
+    route_answered: routeAnswered,
+    route_rate: routeAnswered > 0 ? Math.round(routeCorrect / routeAnswered * 100) : 0,
+    route_time: formatTime(test4TimeUsed),
+    code_answers: test1Answers.map((a, i) => ({
+      q: i + 1,
+      answer: a,
+      correct: a === codeQuestions[i][2]
+    })),
+    calc_answers: test2Answers.map((a, i) => ({
+      q: i + 1,
+      answer: a,
+      expected: calcQuestions[i].answer,
+      correct: a === calcQuestions[i].answer
+    })),
+    count_answers: count_answers,
+    route_answers: test4Answers.map((a, i) => ({
+      q: i + 1,
+      answer: a !== null ? routeQuestions[i].options[a] : null,
+      correct: a === routeQuestions[i].answer
+    }))
+  };
+
+  fetch(GAS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(() => {
+    statusEl.innerHTML = '<span style="color:var(--success);">✔ 結果を送信しました / Resultados enviados com sucesso</span>';
+  })
+  .catch(err => {
+    statusEl.innerHTML = '<span style="color:var(--danger);">✘ 送信エラー / Erro ao enviar: ' + err.message + '</span>';
+  });
+}
+</script>
+</body>
+</html>
