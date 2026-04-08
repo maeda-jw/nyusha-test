@@ -173,9 +173,15 @@ input:focus { border-color: var(--accent); outline: none; }
 .code-label {
   font-family: 'Segoe UI', sans-serif;
   font-size: 0.7em;
-  color: #999;
+  font-weight: bold;
+  color: #fff;
+  background: var(--primary);
   letter-spacing: 0;
-  margin-right: 8px;
+  margin-right: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  vertical-align: middle;
+  display: inline-block;
 }
 .answer-btns {
   display: flex;
@@ -1028,8 +1034,8 @@ function buildPractice(testNum) {
     area.innerHTML = `
       <div class="code-question" id="practice-cq">
         <div class="code-pair">
-          <div class="code-str"><span class="code-label">A</span>${data.code1}</div>
-          <div class="code-str"><span class="code-label">B</span>${data.code2}</div>
+          <div class="code-str">${data.code1}</div>
+          <div class="code-str">${data.code2}</div>
         </div>
         <div class="answer-btns">
           <button class="answer-btn" onclick="checkPractice(1,'○')" id="pb-1-same">○ 同じ / Igual</button>
@@ -1234,8 +1240,8 @@ function buildCodeQuestions() {
     div.innerHTML = `
       <span class="code-num">${circled[i]}</span>
       <div class="code-pair">
-        <div class="code-str"><span class="code-label">A</span>${q[0]}</div>
-        <div class="code-str"><span class="code-label">B</span>${q[1]}</div>
+        <div class="code-str">${q[0]}</div>
+        <div class="code-str">${q[1]}</div>
       </div>
       <div class="answer-btns">
         <button class="answer-btn" onclick="selectCode(${i},'○')" id="cb-${i}-same">○ 同じ / Igual</button>
