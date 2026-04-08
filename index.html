@@ -499,6 +499,44 @@ input:focus { border-color: var(--accent); outline: none; }
   .warehouse-map { max-width: 100%; }
   .wh-cell { min-width: 36px; font-size: 0.65em; }
 }
+/* Practice questions */
+.practice-badge {
+  display: inline-block;
+  background: #f39c12;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+.practice-feedback {
+  padding: 16px;
+  border-radius: 10px;
+  margin-top: 16px;
+  display: none;
+}
+.practice-feedback.correct {
+  background: #eafaf1;
+  border: 2px solid #27ae60;
+  display: block;
+}
+.practice-feedback.incorrect {
+  background: #fdedec;
+  border: 2px solid #e74c3c;
+  display: block;
+}
+.practice-feedback .feedback-icon {
+  font-size: 1.5em;
+  margin-right: 8px;
+}
+.practice-start-btn {
+  display: none;
+  margin-top: 16px;
+}
+.practice-start-btn.visible {
+  display: block;
+}
 </style>
 </head>
 <body>
@@ -508,7 +546,7 @@ input:focus { border-color: var(--accent); outline: none; }
 <div id="sec-start" class="section active">
   <div class="header">
     <h1>入社テスト / Teste de Admissão</h1>
-    <p>Miraiseeds</p>
+    <p>JOYWORK</p>
   </div>
   <div class="card">
     <h2>受験者情報 / Dados do Candidato</h2>
@@ -528,7 +566,25 @@ input:focus { border-color: var(--accent); outline: none; }
     Este teste tem <strong>4 tipos</strong>. Cada teste tem um <strong>limite de 2 minutos</strong>.<br>
     Quando o tempo acabar, será enviado automaticamente. Responda o máximo de perguntas com precisão.</p>
   </div>
-  <button class="btn" onclick="startTest1()">テスト開始 / Iniciar Teste</button>
+  <button class="btn" onclick="showPractice(1)">テスト開始 / Iniciar Teste</button>
+</div>
+
+<!-- ===== SECTION: 練習 テスト1 ===== -->
+<div id="sec-practice1" class="section">
+  <div class="header">
+    <h1>テスト① コード比較 / Comparação de Códigos</h1>
+    <p>まず練習問題を解いてみましょう / Vamos praticar primeiro</p>
+  </div>
+  <div class="card">
+    <span class="practice-badge">練習 / Prática</span>
+    <p style="margin-bottom:12px;">
+      <span class="lang-label">日本語</span> 2つのコードが同じなら <strong>○</strong>、違っていれば <strong>✕</strong> を選んでください。<br><br>
+      <span class="lang-label">Português</span> Se os códigos forem idênticos, marque <strong>○</strong>. Se forem diferentes, marque <strong>✕</strong>.
+    </p>
+    <div id="practice1-area"></div>
+    <div id="practice1-feedback" class="practice-feedback"></div>
+    <button class="btn practice-start-btn" id="practice1-start" onclick="startTest1()">テスト①開始（2分） / Iniciar Teste ① (2min) ▶</button>
+  </div>
 </div>
 
 <!-- ===== SECTION: テスト1 コード比較 ===== -->
@@ -567,7 +623,25 @@ input:focus { border-color: var(--accent); outline: none; }
     O próximo é o <strong>Teste de Cálculo</strong>. O limite de tempo é <strong>2 minutos</strong>.<br>
     Haverá problemas de adição, subtração, multiplicação e divisão.</p>
   </div>
-  <button class="btn" onclick="startTest2()">テスト②開始 / Iniciar Teste ② ▶</button>
+  <button class="btn" onclick="showPractice(2)">テスト②開始 / Iniciar Teste ② ▶</button>
+</div>
+
+<!-- ===== SECTION: 練習 テスト2 ===== -->
+<div id="sec-practice2" class="section">
+  <div class="header">
+    <h1>テスト② 計算 / Cálculos</h1>
+    <p>まず練習問題を解いてみましょう / Vamos praticar primeiro</p>
+  </div>
+  <div class="card">
+    <span class="practice-badge">練習 / Prática</span>
+    <p style="margin-bottom:12px;">
+      <span class="lang-label">日本語</span> 計算をして答えを入力してください。<br><br>
+      <span class="lang-label">Português</span> Faça os cálculos e escreva a resposta.
+    </p>
+    <div id="practice2-area"></div>
+    <div id="practice2-feedback" class="practice-feedback"></div>
+    <button class="btn practice-start-btn" id="practice2-start" onclick="startTest2()">テスト②開始（2分） / Iniciar Teste ② (2min) ▶</button>
+  </div>
 </div>
 
 <!-- ===== SECTION: テスト2 計算 ===== -->
@@ -606,7 +680,25 @@ input:focus { border-color: var(--accent); outline: none; }
     O próximo é o <strong>Teste de Contagem de Produtos</strong>. O limite de tempo é <strong>2 minutos</strong>.<br>
     Conte as figuras mostradas na tela e digite a resposta.</p>
   </div>
-  <button class="btn" onclick="startTest3()">テスト③開始 / Iniciar Teste ③ ▶</button>
+  <button class="btn" onclick="showPractice(3)">テスト③開始 / Iniciar Teste ③ ▶</button>
+</div>
+
+<!-- ===== SECTION: 練習 テスト3 ===== -->
+<div id="sec-practice3" class="section">
+  <div class="header">
+    <h1>テスト③ 商品数計算 / Contagem de Produtos</h1>
+    <p>まず練習問題を解いてみましょう / Vamos praticar primeiro</p>
+  </div>
+  <div class="card">
+    <span class="practice-badge">練習 / Prática</span>
+    <p style="margin-bottom:12px;">
+      <span class="lang-label">日本語</span> 画面の図形の数を数えて、回答欄に入力してください。<br><br>
+      <span class="lang-label">Português</span> Conte as figuras mostradas na tela e escreva a resposta.
+    </p>
+    <div id="practice3-area"></div>
+    <div id="practice3-feedback" class="practice-feedback"></div>
+    <button class="btn practice-start-btn" id="practice3-start" onclick="startTest3()">テスト③開始（2分） / Iniciar Teste ③ (2min) ▶</button>
+  </div>
 </div>
 
 <!-- ===== SECTION: テスト3 商品数計算 ===== -->
@@ -645,7 +737,25 @@ input:focus { border-color: var(--accent); outline: none; }
     O próximo é o <strong>Teste de Julgamento de Rota</strong>. O limite de tempo é <strong>2 minutos</strong>.<br>
     Escolha a ordem mais eficiente para coletar produtos no mapa do armazém.</p>
   </div>
-  <button class="btn" onclick="startTest4()">テスト④開始 / Iniciar Teste ④ ▶</button>
+  <button class="btn" onclick="showPractice(4)">テスト④開始 / Iniciar Teste ④ ▶</button>
+</div>
+
+<!-- ===== SECTION: 練習 テスト4 ===== -->
+<div id="sec-practice4" class="section">
+  <div class="header">
+    <h1>テスト④ 順序判断 / Julgamento de Rota</h1>
+    <p>まず練習問題を解いてみましょう / Vamos praticar primeiro</p>
+  </div>
+  <div class="card">
+    <span class="practice-badge">練習 / Prática</span>
+    <p style="margin-bottom:12px;">
+      <span class="lang-label">日本語</span> 倉庫マップ上の<span style="color:#27ae60;font-weight:bold;">★スタート地点</span>から、<span style="color:#e74c3c;font-weight:bold;">赤いマス</span>を全て回る最短ルートを選んでください。<br><br>
+      <span class="lang-label">Português</span> A partir do <span style="color:#27ae60;font-weight:bold;">★Ponto de partida</span> no mapa, escolha a rota mais curta para visitar todos os <span style="color:#e74c3c;font-weight:bold;">quadrados vermelhos</span>.
+    </p>
+    <div id="practice4-area"></div>
+    <div id="practice4-feedback" class="practice-feedback"></div>
+    <button class="btn practice-start-btn" id="practice4-start" onclick="startTest4()">テスト④開始（2分） / Iniciar Teste ④ (2min) ▶</button>
+  </div>
 </div>
 
 <!-- ===== SECTION: テスト4 順序判断 ===== -->
@@ -847,6 +957,242 @@ const routeQuestions = [
     answer: 0 // 3+2+2=7
   }
 ];
+
+// ============================================================
+// PRACTICE QUESTIONS
+// ============================================================
+const practiceData = {
+  1: {
+    // Code comparison practice
+    code1: "M ― 2 4 8 0 ― A B C D",
+    code2: "M ― 2 4 8 0 ― A B E D",
+    answer: "X", // Different (C→E)
+    explanationJa: "3番目の文字が C と E で異なります。",
+    explanationPt: "A terceira letra é diferente: C e E."
+  },
+  2: {
+    // Calculation practice
+    nums: [12, 5],
+    op: "+",
+    answer: 17,
+    explanationJa: "12 + 5 = 17 です。",
+    explanationPt: "12 + 5 = 17."
+  },
+  3: {
+    // Counting practice - small rectangle grid
+    cols: 4,
+    rows: 3,
+    rects: [
+      {r:0,c:0,w:2,h:1},{r:0,c:2,w:1,h:1},{r:0,c:3,w:1,h:1},
+      {r:1,c:0,w:1,h:1},{r:1,c:1,w:2,h:1},{r:1,c:3,w:1,h:1},
+      {r:2,c:0,w:1,h:1},{r:2,c:1,w:1,h:1},{r:2,c:2,w:2,h:1}
+    ],
+    answer: 9,
+    explanationJa: "大きさの違う図形が全部で 9個 あります。",
+    explanationPt: "Há um total de 9 figuras de tamanhos diferentes."
+  },
+  4: {
+    // Route practice
+    start: [0, 0], // A1
+    targets: [{r:0,c:2,label:'A3'},{r:1,c:0,label:'B1'},{r:1,c:2,label:'B3'}],
+    options: ['B1 → B3 → A3','A3 → B3 → B1','B1 → A3 → B3','A3 → B1 → B3'],
+    answer: 0, // B1→B3→A3: 1+2+1=4 (shortest)
+    explanationJa: "★A1 → B1(距離1) → B3(距離2) → A3(距離1) = 合計4 が最短です。",
+    explanationPt: "★A1 → B1(dist.1) → B3(dist.2) → A3(dist.1) = total 4 é o mais curto."
+  }
+};
+
+let practiceAnswered = { 1: false, 2: false, 3: false, 4: false };
+
+function showPractice(testNum) {
+  if (testNum === 1) {
+    candidateName = document.getElementById('candidate-name').value.trim();
+    if (!candidateName) {
+      alert('名前を入力してください / Por favor, digite seu nome');
+      return;
+    }
+  }
+
+  if (!practiceAnswered[testNum]) {
+    buildPractice(testNum);
+  }
+  showSection('sec-practice' + testNum);
+}
+
+function buildPractice(testNum) {
+  const area = document.getElementById('practice' + testNum + '-area');
+  const data = practiceData[testNum];
+
+  if (testNum === 1) {
+    // Code comparison practice
+    area.innerHTML = `
+      <div class="code-question" id="practice-cq">
+        <div class="code-pair">
+          <div class="code-str"><span class="code-label">A</span>${data.code1}</div>
+          <div class="code-str"><span class="code-label">B</span>${data.code2}</div>
+        </div>
+        <div class="answer-btns">
+          <button class="answer-btn" onclick="checkPractice(1,'○')" id="pb-1-same">○ 同じ / Igual</button>
+          <button class="answer-btn" onclick="checkPractice(1,'X')" id="pb-1-diff">✕ 違う / Diferente</button>
+        </div>
+      </div>
+    `;
+  } else if (testNum === 2) {
+    // Calculation practice
+    const maxLen = Math.max(...data.nums.map(n => n.toString().length));
+    const padded0 = data.nums[0].toString().padStart(maxLen, '\u00A0');
+    const padded1 = data.nums[1].toString().padStart(maxLen, '\u00A0');
+    area.innerHTML = `
+      <div class="calc-question" id="practice-calcq">
+        <div class="calc-operands">
+          <div class="calc-operand" style="font-family:'Courier New',monospace; font-size:1.2em;">
+            <span style="margin-right:8px; visibility:hidden;">+</span>${padded0}
+          </div>
+          <div class="calc-operand" style="font-family:'Courier New',monospace; font-size:1.2em;">
+            <span style="margin-right:8px;">+</span>${padded1}
+          </div>
+        </div>
+        <div class="calc-line"></div>
+        <input type="number" class="calc-input" id="practice-calc-ans" placeholder="?" inputmode="numeric">
+        <button class="btn" onclick="checkPractice(2)" style="margin-top:12px; width:auto; padding:10px 24px; font-size:0.95em;">回答する / Responder</button>
+      </div>
+    `;
+  } else if (testNum === 3) {
+    // Counting practice - small grid
+    let gridHTML = '<div class="size-grid" style="grid-template-columns:repeat(' + data.cols + ',1fr); grid-template-rows:repeat(' + data.rows + ',36px); max-width:300px;">';
+    data.rects.forEach(function(rect) {
+      gridHTML += '<div class="size-rect" style="grid-column:' + (rect.c+1) + '/' + (rect.c+1+rect.w) + '; grid-row:' + (rect.r+1) + '/' + (rect.r+1+rect.h) + ';"></div>';
+    });
+    gridHTML += '</div>';
+
+    area.innerHTML = `
+      <div style="margin-bottom:12px;">
+        ${gridHTML}
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span style="font-weight:bold;">図形の総数 / Total de figuras:</span>
+        <input type="number" class="legend-input" id="practice-count-ans" placeholder="?" inputmode="numeric" style="width:100px !important; font-size:1.3em; padding:12px !important;">
+        <button class="btn" onclick="checkPractice(3)" style="width:auto; padding:10px 24px; font-size:0.95em;">回答する / Responder</button>
+      </div>
+    `;
+  } else if (testNum === 4) {
+    // Route practice
+    const rowLabels = ['A','B'];
+    let gridHTML = '<div class="warehouse-map">';
+    gridHTML += '<div class="wh-header"></div>';
+    for (let c = 0; c < 3; c++) {
+      gridHTML += '<div class="wh-header">' + (c+1) + '</div>';
+    }
+    for (let r = 0; r < 2; r++) {
+      gridHTML += '<div class="wh-header">' + rowLabels[r] + '</div>';
+      for (let c = 0; c < 3; c++) {
+        const label = rowLabels[r] + (c+1);
+        let cls = 'wh-cell';
+        let text = label;
+        if (data.start[0] === r && data.start[1] === c) {
+          cls += ' wh-start';
+          text = '★' + label;
+        } else if (data.targets.some(t => t.r === r && t.c === c)) {
+          cls += ' wh-target';
+        }
+        gridHTML += '<div class="' + cls + '">' + text + '</div>';
+      }
+    }
+    gridHTML += '</div>';
+
+    let optionsHTML = '<div class="route-options">';
+    data.options.forEach((opt, oi) => {
+      optionsHTML += '<div class="route-option" id="pro-' + oi + '" onclick="selectPracticeRoute(' + oi + ')">';
+      optionsHTML += String.fromCharCode(65 + oi) + ') ★ → ' + opt;
+      optionsHTML += '</div>';
+    });
+    optionsHTML += '</div>';
+
+    area.innerHTML = `
+      <div style="margin-bottom:8px; font-weight:bold;">ピック3箇所を回る最短順は？ / Qual a ordem mais curta para 3 coletas?</div>
+      ${gridHTML}
+      ${optionsHTML}
+    `;
+  }
+}
+
+let practiceRouteSelection = null;
+
+function selectPracticeRoute(oi) {
+  if (practiceAnswered[4]) return;
+  practiceRouteSelection = oi;
+  practiceData[4].options.forEach((_, j) => {
+    document.getElementById('pro-' + j).className = 'route-option' + (j === oi ? ' selected' : '');
+  });
+  checkPractice(4);
+}
+
+function checkPractice(testNum, answer) {
+  if (practiceAnswered[testNum]) return;
+
+  const data = practiceData[testNum];
+  const feedbackEl = document.getElementById('practice' + testNum + '-feedback');
+  const startBtn = document.getElementById('practice' + testNum + '-start');
+  let isCorrect = false;
+  let userAnswer = '';
+
+  if (testNum === 1) {
+    // answer is passed as parameter ('○' or 'X')
+    if (!answer) return;
+    userAnswer = answer;
+
+    isCorrect = (userAnswer === data.answer);
+
+    // Highlight buttons
+    if (userAnswer === '○') {
+      document.getElementById('pb-1-same').className = 'answer-btn selected-same';
+      document.getElementById('pb-1-diff').className = 'answer-btn';
+    } else {
+      document.getElementById('pb-1-same').className = 'answer-btn';
+      document.getElementById('pb-1-diff').className = 'answer-btn selected-diff';
+    }
+  } else if (testNum === 2) {
+    const val = document.getElementById('practice-calc-ans').value;
+    if (val === '') return;
+    userAnswer = Number(val);
+    isCorrect = (userAnswer === data.answer);
+  } else if (testNum === 3) {
+    const val = document.getElementById('practice-count-ans').value;
+    if (val === '') return;
+    userAnswer = Number(val);
+    isCorrect = (userAnswer === data.answer);
+  } else if (testNum === 4) {
+    if (practiceRouteSelection === null) return;
+    userAnswer = practiceRouteSelection;
+    isCorrect = (userAnswer === data.answer);
+  }
+
+  practiceAnswered[testNum] = true;
+
+  const icon = isCorrect ? '✅' : '❌';
+  const resultJa = isCorrect ? '正解！' : '不正解';
+  const resultPt = isCorrect ? 'Correto!' : 'Incorreto';
+  const correctAnswerJa = testNum === 1 ? (data.answer === '○' ? '○ 同じ' : '✕ 違う') :
+                          testNum === 4 ? (String.fromCharCode(65 + data.answer) + ') ★ → ' + data.options[data.answer]) :
+                          data.answer;
+  const correctAnswerPt = correctAnswerJa; // same display for numbers/symbols
+
+  feedbackEl.className = 'practice-feedback ' + (isCorrect ? 'correct' : 'incorrect');
+  feedbackEl.innerHTML = `
+    <span class="feedback-icon">${icon}</span><strong>${resultJa} / ${resultPt}</strong><br><br>
+    <span class="lang-label">日本語</span> 正解: <strong>${correctAnswerJa}</strong><br>${data.explanationJa}<br><br>
+    <span class="lang-label">Português</span> Resposta: <strong>${correctAnswerPt}</strong><br>${data.explanationPt}
+  `;
+  feedbackEl.style.display = 'block';
+  startBtn.classList.add('visible');
+
+  // Disable further interaction
+  if (testNum === 2) {
+    document.getElementById('practice-calc-ans').disabled = true;
+  } else if (testNum === 3) {
+    document.getElementById('practice-count-ans').disabled = true;
+  }
+}
 
 // ============================================================
 // STATE
